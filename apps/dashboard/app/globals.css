@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Wire the self-hosted next/font families into the Lumio token variables so the
+   design tokens remain the single source of truth for typography. */
+:root {
+  --lumio-font-display: var(--font-lumio-display), Georgia, serif;
+  --lumio-font-ui: var(--font-lumio-ui), -apple-system, BlinkMacSystemFont, sans-serif;
+  --lumio-font-mono: var(--font-lumio-mono), ui-monospace, monospace;
+}
+
+body {
+  @apply bg-ink-950 font-ui text-paper antialiased;
+}

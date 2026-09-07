@@ -1,0 +1,44 @@
+# Lumio local stack.
+#
+# `db` works standalone today:  docker compose up db
+#
+# The `api` image build runs `pnpm install`, which resolves `@lumio/sdk` /
+# `@lumio/shared`. In this scaffold those are consumed via pnpm `link:` to the
+# sibling `lumio-sdk` checkout, which is NOT visible inside the Docker build
+# context — so the api image builds cleanly only once the SDK packages are
+# published to a registry (a later phase). Until then, run the API on the host
+# with `pnpm --filter @lumio/api dev` and use this file for Postgres.
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: lumio
+      POSTGRES_PASSWORD: lumio
+      POSTGRES_DB: lumio
+    ports:
+      - "5432:5432"
+    volumes:
+      - lumio-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lumio -d lumio"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgres://lumio:lumio@db:5432/lumio
+    ports:
+      - "3000:3000"
+
+volumes:
+  lumio-db:

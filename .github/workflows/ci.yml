@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout lumio-app
+        uses: actions/checkout@v4
+        with:
+          path: lumio-app
+
+      # lumio-app consumes @lumio/ui, @lumio/sdk and @lumio/shared via pnpm
+      # `link:` to a sibling lumio-sdk checkout, so CI must lay them out as
+      # siblings and build the SDK before the app.
+      - name: Checkout lumio-sdk (sibling)
+        uses: actions/checkout@v4
+        with:
+          repository: lumio-network/lumio-sdk
+          path: lumio-sdk
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: |
+            lumio-sdk/pnpm-lock.yaml
+            lumio-app/pnpm-lock.yaml
+
+      - name: Build the SDK (provides the linked @lumio/* packages)
+        working-directory: lumio-sdk
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+
+      - name: Install app dependencies
+        working-directory: lumio-app
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        working-directory: lumio-app
+        run: pnpm lint
+
+      - name: Typecheck
+        working-directory: lumio-app
+        run: pnpm typecheck
+
+      - name: Build
+        working-directory: lumio-app
+        run: pnpm build

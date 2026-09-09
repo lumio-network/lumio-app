@@ -17,6 +17,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json apps/api/package.json
 RUN pnpm install --filter @lumio/api --prod=false --frozen-lockfile
 
+COPY tsconfig.base.json ./
 COPY apps/api/src apps/api/src
 COPY apps/api/nest-cli.json apps/api/tsconfig.json apps/api/
 WORKDIR /app/apps/api

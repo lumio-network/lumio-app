@@ -2,14 +2,21 @@
 
 import { Button, Card, CardBody, CardTitle } from "@lumio/ui";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-interface ErrorProps {
+export default function Error({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-}
-
-export default function Error({ error, reset }: ErrorProps) {
+}) {
   const router = useRouter();
+
+  useEffect(() => {
+    // Log the error to an error reporting service
+    console.error(error);
+  }, [error]);
 
   return (
     <section className="flex min-h-96 items-center justify-center">

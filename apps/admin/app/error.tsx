@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Card, CardBody, CardTitle } from "@lumio/ui";
+import { useRouter } from "next/navigation";
 
 interface ErrorProps {
   error: Error & { digest?: string };
@@ -8,6 +9,8 @@ interface ErrorProps {
 }
 
 export default function Error({ error, reset }: ErrorProps) {
+  const router = useRouter();
+
   return (
     <section className="flex min-h-96 items-center justify-center">
       <Card className="max-w-md">
@@ -28,12 +31,7 @@ export default function Error({ error, reset }: ErrorProps) {
           )}
           <div className="flex gap-2">
             <Button onClick={reset}>Try again</Button>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                window.location.href = "/";
-              }}
-            >
+            <Button variant="secondary" onClick={() => router.push("/")}>
               Go home
             </Button>
           </div>

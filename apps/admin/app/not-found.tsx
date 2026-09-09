@@ -20,7 +20,9 @@ export default function NotFound() {
             <Button
               variant="secondary"
               onClick={() => {
-                window.history.back();
+                if (typeof window !== "undefined") {
+                  window.history.back();
+                }
               }}
             >
               Go back

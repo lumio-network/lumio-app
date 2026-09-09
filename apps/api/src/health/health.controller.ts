@@ -18,7 +18,7 @@ export class HealthController {
     status: "ok" | "unhealthy";
     service: string;
     time: string;
-    indicators: Record<string, any>;
+    indicators: Record<string, unknown>;
   } {
     // TODO: Add actual dependency checks here once DB layer is implemented
     // For now, implement a basic liveness check that can structurally fail

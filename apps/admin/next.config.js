@@ -5,6 +5,11 @@ const nextConfig = {
   transpilePackages: ["@lumio/ui", "@lumio/sdk", "@lumio/shared"],
   // Linting is a separate turbo/eslint task at the repo root, not part of build.
   eslint: { ignoreDuringBuilds: true },
+  images: {
+    dangerouslyAllowSVG: true,
+    contentDispositionType: "attachment",
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
 };
 
 module.exports = nextConfig;

@@ -17,16 +17,6 @@ export default function NotFound() {
             <Link href="/">
               <Button>Go to admin home</Button>
             </Link>
-            <Button
-              variant="secondary"
-              onClick={() => {
-                if (typeof window !== "undefined") {
-                  window.history.back();
-                }
-              }}
-            >
-              Go back
-            </Button>
           </div>
         </CardBody>
       </Card>

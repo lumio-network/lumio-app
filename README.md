@@ -94,6 +94,33 @@ The apps import the finalized brand foundation from `@lumio/ui`:
 Docker build context can't reach the sibling `lumio-sdk` checkout — until then, run the API on the
 host with `pnpm --filter @lumio/api dev`.
 
+## Consuming the published SDK (once `@lumio/*` is on npm)
+
+Today the apps link to a sibling `lumio-sdk` checkout via the `link:` protocol. Once the SDK
+packages are published to npm, switch each app to versioned dependencies so a fresh clone (Vercel,
+Docker, CI) installs them straight from the registry — no sibling checkout required.
+
+In `apps/dashboard/package.json`, `apps/admin/package.json`, and `apps/api/package.json`, replace:
+
+```jsonc
+"@lumio/sdk": "link:../../../lumio-sdk/packages/sdk",
+"@lumio/shared": "link:../../../lumio-sdk/packages/shared",
+"@lumio/ui": "link:../../../lumio-sdk/packages/ui",
+```
+
+with the published versions (match whatever `lumio-sdk` released, e.g. `^0.1.0`):
+
+```jsonc
+"@lumio/sdk": "^0.1.0",
+"@lumio/shared": "^0.1.0",
+"@lumio/ui": "^0.1.0",
+```
+
+(`apps/api` does not depend on `@lumio/ui`; only swap the two it uses.) Then run `pnpm install` to
+refresh the lockfile. After this, the sibling-checkout + build-SDK-first prerequisite above no
+longer applies, and the API Docker image can build. See `lumio-sdk/PUBLISHING.md` for the release
+side of this.
+
 ## License
 
 [Apache-2.0](./LICENSE).

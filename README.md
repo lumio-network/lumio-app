@@ -8,11 +8,11 @@ Part of [Lumio](https://github.com/lumio-network) — an open-source cooperative
 
 ## Apps
 
-| App              | Name              | Stack            | Port   | Responsibility                                    |
-| ---------------- | ----------------- | ---------------- | ------ | ------------------------------------------------- |
-| `apps/dashboard` | `@lumio/dashboard`| Next.js (App Router) | 3001 | Member experience — contributions, treasury, votes. |
-| `apps/admin`     | `@lumio/admin`    | Next.js (App Router) | 3002 | Operator panel — members, cycles, payouts.        |
-| `apps/api`       | `@lumio/api`      | NestJS           | 3000   | Backend — talks to contracts via `@lumio/sdk`.    |
+| App              | Name               | Stack                | Port | Responsibility                                      |
+| ---------------- | ------------------ | -------------------- | ---- | --------------------------------------------------- |
+| `apps/dashboard` | `@lumio/dashboard` | Next.js (App Router) | 3001 | Member experience — contributions, treasury, votes. |
+| `apps/admin`     | `@lumio/admin`     | Next.js (App Router) | 3002 | Operator panel — members, cycles, payouts.          |
+| `apps/api`       | `@lumio/api`       | NestJS               | 3000 | Backend — talks to contracts via `@lumio/sdk`.      |
 
 > ⚠️ **Scaffold.** Every page is a placeholder rendered with the real design system, and the API
 > returns `not-implemented` for domain routes (only `GET /health` does real work). No auth, no
@@ -62,7 +62,7 @@ Verify the API:
 
 ```bash
 curl http://localhost:3000/health
-# {"status":"ok","service":"lumio-api","time":"..."}
+# {"status":"ok","service":"lumio-api","time":"...","indicators":{"liveness":{"status":"up","details":"uptime: 123s"}}}
 ```
 
 ## Scripts

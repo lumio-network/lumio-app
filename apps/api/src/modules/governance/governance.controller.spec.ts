@@ -1,19 +1,18 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { GovernanceController } from './governance.controller';
-import { GovernanceService } from './governance.service';
 
 describe('GovernanceController', () => {
   let controller: GovernanceController;
-  let service: GovernanceService;
+  let mockService: any;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [GovernanceController],
-      providers: [GovernanceService],
-    }).compile();
-
-    controller = module.get<GovernanceController>(GovernanceController);
-    service = module.get<GovernanceService>(GovernanceService);
+  beforeEach(() => {
+    mockService = {
+      summary: jest.fn(() => ({
+        contract: 'governance',
+        status: 'not-implemented',
+        tally: { yes: 0, no: 0, abstain: 0 },
+      })),
+    };
+    controller = new GovernanceController(mockService);
   });
 
   it('should be defined', () => {
@@ -32,11 +31,9 @@ describe('GovernanceController', () => {
     });
 
     it('should call governance service summary method', () => {
-      const serviceSpy = jest.spyOn(service, 'summary');
-      
       controller.summary();
       
-      expect(serviceSpy).toHaveBeenCalledTimes(1);
+      expect(mockService.summary).toHaveBeenCalledTimes(1);
     });
 
     it('should return tally with correct structure', () => {

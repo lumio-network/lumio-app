@@ -1,19 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { TreasuryController } from './treasury.controller';
-import { TreasuryService } from './treasury.service';
 
 describe('TreasuryController', () => {
   let controller: TreasuryController;
-  let service: TreasuryService;
+  let mockService: any;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [TreasuryController],
-      providers: [TreasuryService],
-    }).compile();
-
-    controller = module.get<TreasuryController>(TreasuryController);
-    service = module.get<TreasuryService>(TreasuryService);
+  beforeEach(() => {
+    mockService = {
+      summary: jest.fn(() => ({
+        contract: 'treasury',
+        status: 'not-implemented',
+      })),
+    };
+    controller = new TreasuryController(mockService);
   });
 
   it('should be defined', () => {
@@ -31,11 +29,9 @@ describe('TreasuryController', () => {
     });
 
     it('should call treasury service summary method', () => {
-      const serviceSpy = jest.spyOn(service, 'summary');
-      
       controller.summary();
       
-      expect(serviceSpy).toHaveBeenCalledTimes(1);
+      expect(mockService.summary).toHaveBeenCalledTimes(1);
     });
   });
 });

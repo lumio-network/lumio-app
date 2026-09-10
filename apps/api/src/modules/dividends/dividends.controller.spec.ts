@@ -1,19 +1,17 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { DividendsController } from './dividends.controller';
-import { DividendsService } from './dividends.service';
 
 describe('DividendsController', () => {
   let controller: DividendsController;
-  let service: DividendsService;
+  let mockService: any;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [DividendsController],
-      providers: [DividendsService],
-    }).compile();
-
-    controller = module.get<DividendsController>(DividendsController);
-    service = module.get<DividendsService>(DividendsService);
+  beforeEach(() => {
+    mockService = {
+      summary: jest.fn(() => ({
+        contract: 'dividends',
+        status: 'not-implemented',
+      })),
+    };
+    controller = new DividendsController(mockService);
   });
 
   it('should be defined', () => {
@@ -31,11 +29,9 @@ describe('DividendsController', () => {
     });
 
     it('should call dividends service summary method', () => {
-      const serviceSpy = jest.spyOn(service, 'summary');
-      
       controller.summary();
       
-      expect(serviceSpy).toHaveBeenCalledTimes(1);
+      expect(mockService.summary).toHaveBeenCalledTimes(1);
     });
   });
 });

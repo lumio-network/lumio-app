@@ -58,3 +58,7 @@ jobs:
       - name: Build
         working-directory: lumio-app
         run: pnpm build
+
+      - name: Test
+        working-directory: lumio-app
+        run: pnpm --filter @lumio/api test

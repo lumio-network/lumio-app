@@ -65,6 +65,13 @@ curl http://localhost:3000/health
 # {"status":"ok","service":"lumio-api","time":"...","indicators":{"liveness":{"status":"up","details":"uptime: 123s"}}}
 ```
 
+## Configuration
+
+### API Environment Variables
+
+- **`CORS_ORIGINS`** — Comma-separated list of allowed CORS origins for the API. Defaults to `http://localhost:3001,http://localhost:3002` (dashboard and admin dev ports).
+- **`PORT`** — API server port. Defaults to `3000`.
+
 ## Scripts
 
 ```bash

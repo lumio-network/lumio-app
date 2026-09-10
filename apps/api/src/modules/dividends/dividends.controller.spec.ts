@@ -1,8 +1,12 @@
 import { DividendsController } from './dividends.controller';
 
+interface MockDividendsService {
+  summary(): { contract: string; status: string };
+}
+
 describe('DividendsController', () => {
   let controller: DividendsController;
-  let mockService: any;
+  let mockService: MockDividendsService;
 
   beforeEach(() => {
     mockService = {

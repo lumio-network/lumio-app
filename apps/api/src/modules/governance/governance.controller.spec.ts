@@ -1,8 +1,16 @@
 import { GovernanceController } from './governance.controller';
 
+interface MockGovernanceService {
+  summary(): { 
+    contract: string; 
+    status: string; 
+    tally: { yes: number; no: number; abstain: number } 
+  };
+}
+
 describe('GovernanceController', () => {
   let controller: GovernanceController;
-  let mockService: any;
+  let mockService: MockGovernanceService;
 
   beforeEach(() => {
     mockService = {

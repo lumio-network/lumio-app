@@ -1,8 +1,12 @@
 import { TreasuryController } from './treasury.controller';
 
+interface MockTreasuryService {
+  summary(): { contract: string; status: string };
+}
+
 describe('TreasuryController', () => {
   let controller: TreasuryController;
-  let mockService: any;
+  let mockService: MockTreasuryService;
 
   beforeEach(() => {
     mockService = {

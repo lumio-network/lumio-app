@@ -59,6 +59,10 @@ jobs:
         working-directory: lumio-app
         run: pnpm build
 
-      - name: Test
-        working-directory: lumio-app
-        run: pnpm --filter @lumio/api test
+      - name: Install API test dependencies
+        working-directory: lumio-app/apps/api
+        run: pnpm add -D @nestjs/testing@^11.0.0 @types/jest@^29.5.14 @types/supertest@^6.0.2 jest@^29.7.0 supertest@^7.0.0 ts-jest@^29.2.5
+
+      - name: Test API
+        working-directory: lumio-app/apps/api
+        run: npx jest

@@ -1,7 +1,7 @@
 # Contributing to lumio-app
 
 Thanks for your interest in Lumio — an open-source cooperative finance platform for savings
-groups (*ajo*, *esusu*, *chamas*, SACCOs) on Stellar / Soroban. This repo holds the **product
+groups (_ajo_, _esusu_, _chamas_, SACCOs) on Stellar / Soroban. This repo holds the **product
 surface**: the member [dashboard](apps/dashboard), the [admin](apps/admin) panel, and the
 [API](apps/api). It sits on top of the [SDK](https://github.com/lumio-network/lumio-sdk) and the
 [contracts](https://github.com/lumio-network/lumio-contracts).

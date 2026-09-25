@@ -1,7 +1,6 @@
 import "reflect-metadata";
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import { Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { AppModule } from "./app.module";
 import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
@@ -14,6 +13,12 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
+  // -----------------------------------------------------------------
+  // Global exception filter – every unhandled error gets a consistent
+  // JSON envelope: { statusCode, message, error, timestamp, path }
+  // -----------------------------------------------------------------
+  app.useGlobalFilters(new AllExceptionsFilter());
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -21,17 +26,23 @@ async function bootstrap() {
     }),
   );
 
-  // Configure CORS for dashboard and admin origins
-  const corsOrigins = process.env.CORS_ORIGINS
-    ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
-    : ["http://localhost:3001", "http://localhost:3002"];
+  // -----------------------------------------------------------------
+  // Read config via ConfigService (issue #20)
+  // process.env is no longer accessed directly after this point.
+  // -----------------------------------------------------------------
+  const configService = app.get<ConfigService<AppConfig>>(ConfigService);
+
+  const corsOrigins = configService
+    .get<string>("CORS_ORIGINS")!
+    .split(",")
+    .map((origin) => origin.trim());
 
   app.enableCors({
     origin: corsOrigins,
     credentials: true,
   });
 
-  const port = Number(process.env.PORT ?? 3000);
+  const port = configService.get<number>("PORT")!;
   await app.listen(port);
 
   // -----------------------------------------------------------------

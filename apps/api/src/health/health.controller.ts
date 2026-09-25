@@ -1,8 +1,14 @@
 import { Controller, Get, HttpException, HttpStatus } from "@nestjs/common";
+import { ApiOkResponse, ApiServiceUnavailableResponse, ApiTags } from "@nestjs/swagger";
+import { SkipThrottle } from "@nestjs/throttler";
 
 /** Health check endpoint with proper readiness probe functionality. */
+@ApiTags("health")
+@SkipThrottle()
 @Controller()
 export class HealthController {
+  @ApiOkResponse({ description: "Service is healthy." })
+  @ApiServiceUnavailableResponse({ description: "Service is unhealthy." })
   @Get("health")
   check() {
     const healthStatus = this.performHealthCheck();

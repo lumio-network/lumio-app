@@ -1,12 +1,16 @@
 import "reflect-metadata";
-import { ValidationPipe } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { AllExceptionsFilter } from "./common/filters/all-exceptions.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get(ConfigService);
 
   app.enableShutdownHooks();
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -16,18 +20,19 @@ async function bootstrap() {
   );
 
   // Configure CORS for dashboard and admin origins
-  const corsOrigins = process.env.CORS_ORIGINS
-    ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
-    : ["http://localhost:3001", "http://localhost:3002"];
+  const corsOrigins = configService
+    .getOrThrow<string>("CORS_ORIGINS")
+    .split(",")
+    .map((origin) => origin.trim());
 
   app.enableCors({
     origin: corsOrigins,
     credentials: true,
   });
 
-  const port = Number(process.env.PORT ?? 3000);
+  const port = configService.getOrThrow<number>("PORT");
   await app.listen(port);
-  console.log(`Lumio API listening on http://localhost:${port}`);
+  new Logger("Bootstrap").log(`Lumio API listening on http://localhost:${port}`);
 }
 
 void bootstrap();

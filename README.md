@@ -71,6 +71,7 @@ curl http://localhost:3000/health
 
 - **`CORS_ORIGINS`** — Comma-separated list of allowed CORS origins for the API. Defaults to `http://localhost:3001,http://localhost:3002` (dashboard and admin dev ports).
 - **`PORT`** — API server port. Defaults to `3000`.
+- **`DATABASE_URL`** — Optional PostgreSQL connection URL reserved for the future database layer. It is validated when provided but is not used by the API yet.
 
 ## Scripts
 

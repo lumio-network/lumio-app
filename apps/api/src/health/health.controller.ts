@@ -1,9 +1,54 @@
 import { Controller, Get, HttpException, HttpStatus } from "@nestjs/common";
+import { ApiOkResponse, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { SkipThrottle } from "@nestjs/throttler";
 
 /** Health check endpoint with proper readiness probe functionality. */
+@ApiTags("health")
 @Controller()
 export class HealthController {
   @Get("health")
+  @SkipThrottle()
+  @ApiOkResponse({
+    description: "API health status",
+    schema: {
+      type: "object",
+      required: ["status", "service", "time", "indicators"],
+      properties: {
+        status: { type: "string", enum: ["ok"] },
+        service: { type: "string", example: "lumio-api" },
+        time: { type: "string", format: "date-time" },
+        indicators: {
+          type: "object",
+          required: ["liveness"],
+          properties: {
+            liveness: {
+              type: "object",
+              required: ["status", "details"],
+              properties: {
+                status: { type: "string", enum: ["up", "down"] },
+                details: { type: "string" },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 503,
+    description: "Health check failed",
+    schema: {
+      type: "object",
+      required: ["statusCode", "message", "error", "timestamp", "path"],
+      properties: {
+        statusCode: { type: "integer", example: 503 },
+        message: { type: "string" },
+        error: { type: "string" },
+        timestamp: { type: "string", format: "date-time" },
+        path: { type: "string", example: "/health" },
+      },
+    },
+  })
   check() {
     const healthStatus = this.performHealthCheck();
 

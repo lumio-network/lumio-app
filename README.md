@@ -71,6 +71,10 @@ curl http://localhost:3000/health
 
 - **`CORS_ORIGINS`** — Comma-separated list of allowed CORS origins for the API. Defaults to `http://localhost:3001,http://localhost:3002` (dashboard and admin dev ports).
 - **`PORT`** — API server port. Defaults to `3000`.
+- **`RATE_LIMIT_TTL_MS`** — Rate-limit window in milliseconds. Defaults to `60000`.
+- **`RATE_LIMIT_LIMIT`** — Maximum requests per client per window. Defaults to `100`. `GET /health` is exempt.
+
+The API serves its OpenAPI document and Swagger UI at `/docs-json` and `/docs`. These routes are enabled in every environment and are unauthenticated. Helmet applies security headers globally; its Content-Security-Policy header is disabled only for `/docs` and its UI assets so Swagger's inline bootstrap can run. The API's CORS allowlist remains controlled by `CORS_ORIGINS`, so dashboard and admin origins do not need header relaxations. Frontend-specific CSP tuning is a follow-up.
 
 ## Scripts
 

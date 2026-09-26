@@ -14,6 +14,10 @@ export interface AppConfig {
    * Defaults to the local dashboard and admin dev ports when not set.
    */
   CORS_ORIGINS: string;
+  /** Maximum requests accepted per rate-limit window. Defaults to 100. */
+  RATE_LIMIT_LIMIT: number;
+  /** Rate-limit window duration in milliseconds. Defaults to 60000. */
+  RATE_LIMIT_TTL_MS: number;
   /**
    * Database connection string.
    * Optional – documented as a placeholder for the future DB layer.
@@ -47,15 +51,52 @@ export function validateEnv(config: Record<string, unknown>): AppConfig {
       ? String(config["CORS_ORIGINS"])
       : "http://localhost:3001,http://localhost:3002";
 
+  const rateLimitTtlMs = parsePositiveInteger(
+    "RATE_LIMIT_TTL_MS",
+    config["RATE_LIMIT_TTL_MS"],
+    60000,
+    errors,
+  );
+  const rateLimitLimit = parsePositiveInteger(
+    "RATE_LIMIT_LIMIT",
+    config["RATE_LIMIT_LIMIT"],
+    100,
+    errors,
+  );
+
   if (errors.length > 0) {
     throw new Error(`Environment validation failed:\n  - ${errors.join("\n  - ")}`);
   }
 
-  const result: AppConfig = { PORT: port, CORS_ORIGINS: corsOrigins };
+  const result: AppConfig = {
+    PORT: port,
+    CORS_ORIGINS: corsOrigins,
+    RATE_LIMIT_TTL_MS: rateLimitTtlMs,
+    RATE_LIMIT_LIMIT: rateLimitLimit,
+  };
 
   if (config["DATABASE_URL"]) {
     result.DATABASE_URL = String(config["DATABASE_URL"]);
   }
 
   return result;
+}
+
+function parsePositiveInteger(
+  name: string,
+  value: unknown,
+  defaultValue: number,
+  errors: string[],
+): number {
+  if (value === undefined || value === "") {
+    return defaultValue;
+  }
+
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed) || parsed < 1) {
+    errors.push(`${name} must be a positive integer (got "${value}")`);
+    return defaultValue;
+  }
+
+  return parsed;
 }

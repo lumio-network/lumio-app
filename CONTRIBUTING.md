@@ -56,6 +56,13 @@ pnpm lint && pnpm typecheck && pnpm build
 
 Formatting is checked with Prettier — run `pnpm format` to auto-fix (or `pnpm format:check` to verify).
 
+## Review ownership and local hooks
+
+`.github/CODEOWNERS` routes application and repository-automation changes to the maintainer; GitHub
+requests Code Owner reviews when that repository setting is enabled. Run `pnpm install` to set up the
+Husky hooks. The pre-commit hook runs Prettier on staged files, and the commit-message hook checks
+Conventional Commits with commitlint. Pull requests are checked for the same title convention.
+
 ## Dependency and security automation
 
 Dependabot checks the pnpm workspace and GitHub Actions weekly; minor and patch npm updates are

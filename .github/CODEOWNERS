@@ -1,0 +1,8 @@
+# Default owner for repository changes.
+* @Mona-i
+
+# Application and automation ownership.
+/apps/api/ @Mona-i
+/apps/dashboard/ @Mona-i
+/apps/admin/ @Mona-i
+/.github/ @Mona-i

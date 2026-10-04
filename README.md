@@ -6,6 +6,9 @@ will sit between them and the chain.
 
 Part of [Lumio](https://github.com/lumio-network) — an open-source cooperative finance platform.
 
+See [ARCHITECTURE.md](ARCHITECTURE.md) for the workspace layout, SDK dependency model, current
+scaffold status, and phased roadmap.
+
 ## Apps
 
 | App              | Name                               | Stack                | Port | Responsibility                                      |

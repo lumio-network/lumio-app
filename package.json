@@ -21,17 +21,17 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
-    "@types/node": "^26.6.3",
+    "@types/node": "^26.6.5",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.0",
     "eslint": "^9.14.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.2",
-    "prettier": "^3.9.9",
-    "turbo": "^2.11.5",
+    "prettier": "^3.9.10",
+    "turbo": "^2.11.10",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.71.0"
+    "typescript-eslint": "^8.72.1"
   },
   "lint-staged": {
     "**/*.{js,cjs,mjs,ts,tsx,jsx,json,md,yml,yaml,css}": "prettier --write"
